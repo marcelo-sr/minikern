@@ -52,8 +52,11 @@ make -j$(nproc)
 ```bash
 cp external/busybox/busybox initramfs/bin/
 cd initramfs/bin
-./busybox --install -s .
-chmod +x busybox
+
+./busybox --list | while read applet; do
+  [ "$applet" = "busybox" ] && continue
+  ln -sf busybox "$applet"
+done
 ```
 ## 6. Create the `init` script
 ```bash
